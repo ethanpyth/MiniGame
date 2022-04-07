@@ -1,6 +1,8 @@
 <?php
 
-class Personnage{
+namespace Player;
+
+class Personnages{
     private int $_id;
     private string $_name;
     private int $_damage;
@@ -14,6 +16,8 @@ class Personnage{
     }
 
     public function hydrate(array $data){
+        $key = '';
+        $value = '';
         foreach ($data as $key->$value){
             $method = 'set'.ucfirst($key);
             if(method_exists($this, $method)){
@@ -22,7 +26,8 @@ class Personnage{
         }
     }
 
-    public function beat(Personnage $perso){
+    public function beat(Personnages $perso): int|string
+    {
         if($perso->_id != $this->_id){
             return $perso->receiveDamages();
         }else{
@@ -30,13 +35,9 @@ class Personnage{
         }
     }
 
-    public function validName($name): bool
+    public function validName(): bool
     {
-        if(!empty($name)){
-            return true;
-        }else{
-            return false;
-        }
+        return !empty($this->_name);
     }
 
     public  function receiveDamages(): string

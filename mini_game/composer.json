@@ -1,0 +1,21 @@
+{
+  "name": "vendor_name/mini_game",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "excellence",
+      "email": "excellencekawej@gmail.com"
+    }
+  ],
+  "require": {
+    "autoload": {
+      "psr-4": {
+        "MiniGame\\": "src/",
+        "Player\\": "src/"
+      }
+    },
+    "ext-pdo": "*"
+  }
+}
