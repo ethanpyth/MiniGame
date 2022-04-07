@@ -9,13 +9,13 @@
       "email": "excellencekawej@gmail.com"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "MiniGame\\": "src/",
+      "Player\\": "src/"
+    }
+  },
   "require": {
-    "autoload": {
-      "psr-4": {
-        "MiniGame\\": "src/",
-        "Player\\": "src/"
-      }
-    },
     "ext-pdo": "*"
   }
 }
