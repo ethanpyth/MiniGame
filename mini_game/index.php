@@ -3,7 +3,7 @@
 require 'vendor/autoload.php';
 
 Use MiniGame\PersoManager;
-Use Player\Personnages;
+Use MiniGame\Personnages;
 
 $db = new PDO('mysql:host=localhost;dbname=mini_game', 'root', '');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
@@ -40,16 +40,48 @@ if(isset($_POST['create']) && isset($_POST['name'])){
 <body>
     <p>Nombres de personnages créés : <?php echo $manager->count(); ?> </p>
     <?php
-        if (isset($message))
-            echo '<p>' . $message . '</p>'
+        if (isset($message)){
+            echo '<p>' . $message . '</p>';
+        }
+        if (isset($perso)){
     ?>
-    <form action=".." method="post">
-        <p>
-            <label for="name">Nom :</label>
-            <input type="text" name="name" id="name" maxlength="50"><br><br>
-            <input type="submit" value="Créer ce personnage" name="create"><br><br>
-            <input type="submit" value="Utiliser ce personnage" name="use"><br><br>
-        </p>
-    </form>
+            <fieldset>
+                <legend>Mes informations</legend>
+                <p>
+                    Nom: <?php echo htmlspecialchars($perso->getName()); ?><br><br>
+                    Dégats : <?php echo $perso->getDamage(); ?><br><br>
+                </p>
+            </fieldset>
+            <fieldset>
+                <legend>Qui frapper?</legend>
+                <p>
+                    <?php 
+                        $persos = $manager->getList($perso->getName());
+                        if (empty($persos)){
+                            echo 'Personne à frapper !';
+                        }else{
+                            foreach ($persos as $perso){
+                                echo '<a href="?frapper=' . $perso->getId() . '">' . htmlspecialchars($perso->getName())
+                                    . '</a> (dégats : ' . $perso->getDamages() . ')<br/>';
+                            }
+                        }
+                    ?>
+                </p>
+            </fieldset>
+        <?php
+            }
+            else{
+        ?>      
+            <form action="" method="post">
+                <p>
+                    <label for="name">Nom :</label>
+                    <input type="text" name="name" id="name" maxlength="50"><br><br>
+                    <input type="submit" value="Créer ce personnage" name="create"><br><br>
+                    <input type="submit" value="Utiliser ce personnage" name="use"><br><br>
+                </p>
+            </form>
+        <?php
+            }
+        ?>
 </body>
 </html>

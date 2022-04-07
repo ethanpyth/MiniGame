@@ -1,6 +1,6 @@
 <?php
 
-namespace Player;
+namespace MiniGame;
 
 class Personnages{
     private int $_id;
@@ -11,13 +11,14 @@ class Personnages{
     const PERSOTUE = 2;
     const PERSOFRAPPE = 3;
 
+
     public function __construct(array $data){
         $this->hydrate($data);
     }
 
     public function hydrate(array $data){
-        $key = '';
-        $value = '';
+        $key = "";
+        $value = "";
         foreach ($data as $key->$value){
             $method = 'set'.ucfirst($key);
             if(method_exists($this, $method)){

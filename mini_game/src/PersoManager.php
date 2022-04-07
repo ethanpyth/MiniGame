@@ -2,7 +2,8 @@
 
 namespace MiniGame;
 
-use Player\Personnages;
+use PDO;
+use MiniGame\Personnages;
 
 class PersoManager{
     private mixed $_db;
@@ -83,7 +84,7 @@ class PersoManager{
     /**
      * @param mixed $db
      */
-    public function setDb(PDO $db): void
+    public function setDb(mixed $db): void
     {
         $this->_db = $db;
     }
