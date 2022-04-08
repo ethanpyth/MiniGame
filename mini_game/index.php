@@ -2,8 +2,16 @@
 
 require 'vendor/autoload.php';
 
+session_start();
+
 Use MiniGame\PersoManager;
 Use MiniGame\Personnages;
+
+if(isset($_GET['deconnected'])){
+    session_destroy();
+    header('Location: .');
+    exit();
+}
 
 $db = new PDO('mysql:host=localhost;dbname=mini_game', 'root', '');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
@@ -27,6 +35,33 @@ if(isset($_POST['create']) && isset($_POST['name'])){
     }else{
         $message = 'Ce personnage n\'éxiste pas!';
     }
+}elseif (isset($_GET['beat'])){
+    if(!isset($perso)){
+        $message = 'Merci de créer un personnage ou de vous identifier.';
+    }else{
+        if (!$manager){
+            $message = 'Le personnage que vous voulez frapper n\'existe pas !';
+        }
+        else{
+            $perso_to_beat = $manager->getInfo((int) $_GET['beat']);
+            $return = $perso->beat($perso_to_beat);
+            switch ($return){
+                case Personnages::MINE :
+                    $message = 'Mais... pourquoi voulez-vous frapper???';
+                    break;
+                case Personnages::PERSOFRAPPE :
+                    $message = 'Le personnage a bien été frappé';
+                     $manager->update($perso);
+                     $manager->update($perso_to_beat);
+                     break;
+                case Personnages::PERSOTUE :
+                    $message = 'Vous avez tué ce personnage' . $perso_to_beat->getName();
+                    $manager->update($perso);
+                    $manager->delete($perso_to_beat);
+                    break;
+            }
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -45,6 +80,7 @@ if(isset($_POST['create']) && isset($_POST['name'])){
         }
         if (isset($perso)){
     ?>
+        <p><a href="?deconnected=1">Deconnexion</a></p>
             <fieldset>
                 <legend>Mes informations</legend>
                 <p>
@@ -60,9 +96,9 @@ if(isset($_POST['create']) && isset($_POST['name'])){
                         if (empty($persos)){
                             echo 'Personne à frapper !';
                         }else{
-                            foreach ($persos as $perso){
-                                echo '<a href="?frapper=' . $perso->getId() . '">' . htmlspecialchars($perso->getName())
-                                    . '</a> (dégats : ' . $perso->getDamages() . ')<br/>';
+                            foreach ($persos as $aperso){
+                                echo '<a href="?frapper=' . $aperso->getId() . '">' . htmlspecialchars($aperso->getName())
+                                    . '</a> (dégats : ' . $aperso->getDamages() . ')<br/>';
                             }
                         }
                     ?>
@@ -85,3 +121,8 @@ if(isset($_POST['create']) && isset($_POST['name'])){
         ?>
 </body>
 </html>
+
+<?php
+    if (isset($perso)){
+        $_SESSION['perso'] = $perso;
+    }
