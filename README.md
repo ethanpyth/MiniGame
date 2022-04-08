@@ -1,2 +1,10 @@
 # POO_with_php
-this repository it's for increase my knowledge in php by studying the OOP(object oriented Programming
+
+This repository it's for increasing my knowledge in php by studying the OOP(object oriented Programming)
+
+## Technologies
+
+Project is written with :
+* PHP : 8.1
+* composer autoloader
+* ext-pdo : *
