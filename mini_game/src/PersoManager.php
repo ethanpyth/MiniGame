@@ -16,10 +16,11 @@ class PersoManager{
         $this->_db->execute('DELETE FROM personnages WHERE id = '. $perso->getId());
     }
 
-    public function update(Personnages $perso){
-        $q = $this->_db->prepare('UPDATE personnages SET damages = :damages WHERE id = :id');
-        $q->bindValue(':damages', $perso->receiveDamages(), PDO::PARAM_INT);
-        $q->bindValue(':damages', $perso->getId(), PDO::PARAM_INT);
+    public function update(Personnages $perso, string $field_db){
+        $method = 'increase'. ucfirst($field_db);
+        $q = $this->_db->prepare('UPDATE personnages SET ' . $field_db .' = :field_db WHERE id = :id');
+        $q->bindValue(':field_db', $perso->$method(), PDO::PARAM_INT);
+        $q->bindValue(':id', $perso->getId(), PDO::PARAM_INT);
         $q->execute();
     }
 
@@ -55,12 +56,12 @@ class PersoManager{
     public function getInfo($info): Personnages
     {
         if(is_int($info)){
-            $q = $this->_db->query('SELECT id, name, damages FROM personnages WHERE id = '.$info);
+            $q = $this->_db->query('SELECT id, name, damages, xp, level, strength FROM personnages WHERE id = ' . $info);
             $data = $q->fetch(PDO::FETCH_ASSOC);
 
             return new Personnages($data);
         }else{
-            $q = $this->_db->prepare('SELECT id , name, damages FROM personnages WHERE name = :name');
+            $q = $this->_db->prepare('SELECT id , name, damages, xp, level, strength FROM personnages WHERE name = :name');
             $q->execute(array(':name' => $info));
 
             return new Personnages($q->fetch(PDO::FETCH_ASSOC));

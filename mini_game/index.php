@@ -24,7 +24,7 @@ if(isset($_POST['create']) && isset($_POST['name'])){
         $message = 'Le nom choisi est invalide.';
         unset($perso);
     }elseif ($manager->exists($perso->getName())){
-        $message = 'le nom du personnage est déja pris';
+        $message = 'le nom du personnage est déjà pris';
         unset($perso);
     }else{
         $manager->add($perso);
@@ -51,13 +51,13 @@ if(isset($_POST['create']) && isset($_POST['name'])){
                     break;
                 case Personnages::PERSOFRAPPE :
                     $message = 'Le personnage a bien été frappé';
-                    $manager->update($perso);
-                    $manager->update($perso_to_beat);
+                    $manager->update($perso, 'damages');
+                    $manager->update($perso_to_beat, 'damages');
                     $perso->addXp($return);
                     break;
                 case Personnages::PERSOTUE :
                     $message = 'Vous avez tué ce personnage' . $perso_to_beat->getName();
-                    $manager->update($perso);
+                    $manager->update($perso, 'damages');
                     $manager->delete($perso_to_beat);
                     $perso->addXp($return);
                     break;
@@ -88,6 +88,9 @@ if(isset($_POST['create']) && isset($_POST['name'])){
                 <p>
                     Nom: <?php echo htmlspecialchars($perso->getName()); ?><br><br>
                     Dégats : <?php echo $perso->getDamage(); ?><br><br>
+                    Expériences : <?php echo $perso->getXp() ?><br><br>
+                    Niveau : <?php echo $perso->getLevel() ?><br><br>
+                    Force : <?php echo $perso->getStrength() ?><br><br>
                 </p>
             </fieldset>
             <fieldset>

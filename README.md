@@ -11,7 +11,7 @@ Project is written with :
 
 ## Features
 Adding to all personnages :
-* the experiences and the level
-* the strength
+* the experiences and the level 
+* the strength when the level is increased
 * the limitation of the number of beats to 3
 * decreasing the damages each time of signing in of the user

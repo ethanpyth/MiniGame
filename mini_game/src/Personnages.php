@@ -8,25 +8,39 @@ class Personnages{
     private int $_damage = 0;
     private int $_level;
     private int $_xp;
+    private int $_strength;
 
     const MINE = 1;
     const PERSOTUE = 2;
     const PERSOFRAPPE = 3;
 
-
+    /**
+     * @param array $data
+     */
     public function __construct(array $data){
         $this->hydrate($data);
+    }
+
+    public function increaseStrength(){
+        $this->_strength += 3;
+    }
+
+    public function increaseLevel(int $xp){
+        if ($xp % 10 == 0){
+            $this->_level++;
+        }
     }
 
     /**
      * @param int $beat_value
      * @return void
      */
-    public function addXp(int $beat_value){
+    public function increaseXp(int $beat_value){
+        if($this->getXp())
             if($beat_value == 2){
                 $this->_xp += 5;
             }elseif($beat_value == 3){
-                $this->_xp++;
+                $this->_xp += 3;
             }
     }
 
@@ -50,7 +64,7 @@ class Personnages{
     public function beat(Personnages $perso): int
     {
         if($perso->_id != $this->_id){
-            return $perso->receiveDamages();
+            return $perso->increaseDamages();
         }else{
             return self::MINE;
         }
@@ -61,14 +75,20 @@ class Personnages{
         return !empty($this->_name);
     }
 
-    public  function receiveDamages(): string
+    public  function increaseDamages(): string
     {
-        $this->setDamage(5);
+        $this->_damage += 5;
 
         if($this->_damage >= 100){
             return self::PERSOTUE;
         }else{
             return self::PERSOFRAPPE;
+        }
+    }
+
+    public function decreaseDamages(){
+        if ( $this->_damage >= 0 && $this->_damage <=100 ){
+            $this->_damage -= 2;
         }
     }
 
@@ -132,9 +152,6 @@ class Personnages{
         return $this->_level;
     }
 
-    /**
-     * @param int $level
-     */
     public function setLevel(int $level): void
     {
         $this->_level = $level;
@@ -154,5 +171,21 @@ class Personnages{
     public function setXp(int $xp): void
     {
         $this->_xp = $xp;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStrength(): int
+    {
+        return $this->_strength;
+    }
+
+    /**
+     * @param int $strength
+     */
+    public function setStrength(int $strength): void
+    {
+        $this->_strength = $strength;
     }
 }
