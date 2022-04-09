@@ -1,6 +1,10 @@
-# POO_with_php
+# MINI GAME
 
 This repository it's for increasing my knowledge in php by studying the OOP(object oriented Programming)
+
+## Introduction
+
+In this project i've built a mini game of war where two or more players can paly together
 
 ## Technologies
 
