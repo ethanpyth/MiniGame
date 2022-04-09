@@ -67,7 +67,7 @@ class PersoManager{
         }
     }
 
-    public function getList(Personnages $name): array
+    public function getList($name): array
     {
         $persos = array();
 

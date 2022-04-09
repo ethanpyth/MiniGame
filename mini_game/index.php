@@ -39,7 +39,7 @@ if(isset($_POST['create']) && isset($_POST['name'])){
     if(!isset($perso)){
         $message = 'Merci de créer un personnage ou de vous identifier.';
     }else{
-        if (!$manager){
+        if (!$manager->exists((int) $_GET['beat'])){
             $message = 'Le personnage que vous voulez frapper n\'existe pas !';
         }
         else{
@@ -51,13 +51,15 @@ if(isset($_POST['create']) && isset($_POST['name'])){
                     break;
                 case Personnages::PERSOFRAPPE :
                     $message = 'Le personnage a bien été frappé';
-                     $manager->update($perso);
-                     $manager->update($perso_to_beat);
-                     break;
+                    $manager->update($perso);
+                    $manager->update($perso_to_beat);
+                    $perso->addXp($return);
+                    break;
                 case Personnages::PERSOTUE :
                     $message = 'Vous avez tué ce personnage' . $perso_to_beat->getName();
                     $manager->update($perso);
                     $manager->delete($perso_to_beat);
+                    $perso->addXp($return);
                     break;
             }
         }
@@ -96,9 +98,9 @@ if(isset($_POST['create']) && isset($_POST['name'])){
                         if (empty($persos)){
                             echo 'Personne à frapper !';
                         }else{
-                            foreach ($persos as $aperso){
-                                echo '<a href="?frapper=' . $aperso->getId() . '">' . htmlspecialchars($aperso->getName())
-                                    . '</a> (dégats : ' . $aperso->getDamages() . ')<br/>';
+                            foreach ($persos as $perso){
+                                echo '<a href="?beat=' . $perso->getId() . '">' . htmlspecialchars($perso->getName())
+                                    . '</a> (dégats : ' . $perso->getDamage() . ')<br/>';
                             }
                         }
                     ?>
